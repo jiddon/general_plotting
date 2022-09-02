@@ -87,6 +87,14 @@ class Plots(object):
         sns.pairplot(self._df)
         plt.show()
 
+    def residuals(self, x, y):
+        """
+        Residuals plot.
+        """
+        sns.residplot(x=x, y=y, lowess=True, data=self._df)
+        plt.show()
+        
+
 
 if __name__=="__main__":
     fire.Fire(Plots)
