@@ -12,6 +12,18 @@ def read_csv(filename):
     df = pd.read_csv(filename, delimiter=',', skipinitialspace=True)
     return df
 
+def normalise(df, exclude=None):
+    result = df.copy()
+    for col in df.columns:
+        if col != exclude:
+            max_value = df[col].max()
+            min_value = df[col].min()
+            if (max_value != 0 and min_value != 0):
+                result[col] = (df[col] - min_value) / (max_value - min_value)
+            else:
+                result[col] = df[col]
+    return result
+
 class Plots(object):
     """
     Plotting methods.
@@ -74,6 +86,24 @@ class Plots(object):
             df.plot(x, col, ax=axes[n//3, n%3])
         plt.tight_layout()
         plt.show()
+
+    def plot_normalised_as_function_of(self, x):
+        """
+        Line plot for all normalised columns as a function of x.
+        """
+        _df = self._df.sort_values(by=x)
+        df = normalise(_df, exclude=x)
+        print(df)
+        df_cols = list(df.columns.values)
+        df_cols.remove(x)
+        ncols = len(df_cols)
+        ax = df.plot(x, df_cols[0])
+        for n,col in enumerate(df_cols[1:]):
+            df.plot(x, col, ax=ax)
+        ax.set_ylabel("Normalised column", fontsize=10)
+        plt.tight_layout()
+        plt.show()
+
 
     def correlation(self):
         """
