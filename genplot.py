@@ -57,6 +57,24 @@ class Plots(object):
         plt.tight_layout()
         plt.show()
 
+    def plot_as_function_of(self, x):
+        """
+        Line plot for all columns as a function of x.
+        """
+        df = self._df.sort_values(by=x)
+        print(df)
+        df_cols = list(df.columns.values)
+        df_cols.remove(x)
+        ncols = len(df_cols)
+        pcols = 3
+        prows = ncols//pcols+1 if ncols%pcols>0 else ncols//pcols        
+        fig, axes = plt.subplots(nrows=prows, ncols=pcols)
+        axes[-((pcols*prows)-ncols), -((pcols*prows)-ncols)].axis('off')
+        for n,col in enumerate(df_cols):
+            df.plot(x, col, ax=axes[n//3, n%3])
+        plt.tight_layout()
+        plt.show()
+
     def correlation(self):
         """
         Correlation matrix.
