@@ -57,15 +57,10 @@ class Plots(object):
         plt.tight_layout()
         plt.show()
 
-    def correlation(self, sort_on=None):
+    def correlation(self):
         """
         Correlation matrix.
         """
-        if not sort_on:
-            print(self._df)
-        else:
-            df = self._df.sort_values(by=sort_on)
-            print(df)
         corr = self._df.corr()
         cmap = sns.diverging_palette(230, 20, as_cmap=True)
         plt.figure()
@@ -90,11 +85,15 @@ class Plots(object):
                            bbox={'boxstyle': 'round', 'fc': 'powderblue', 'ec': 'navy'})
         plt.show()
 
-    def pairplot(self):
+    def pairplot(self, sort_on=None):
         """
         Pair plot.
         """
-        print(self._df)
+        if not sort_on:
+            df = self._df
+        else:
+            df = self._df.sort_values(by=sort_on)            
+        print(df)
         sns.set_theme(style="ticks")
         sns.pairplot(self._df)
         plt.show()
