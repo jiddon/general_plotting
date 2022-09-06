@@ -9,8 +9,7 @@ def read_csv(filename):
     """
     Read nicely formatted csv into pandas dataframe.
     """
-    df = pd.read_csv(filename)
-    print(df)
+    df = pd.read_csv(filename, delimiter=',', skipinitialspace=True)
     return df
 
 class Plots(object):
@@ -25,6 +24,7 @@ class Plots(object):
         """
         Print csv file headers.
         """
+        print(self._df)
         print("Available headers to plot: ")
         for header in self._df.columns.values:
             header.replace("'", "")
@@ -34,6 +34,7 @@ class Plots(object):
         """
         Histogram.
         """
+        print(self._df)
         self._df.hist(column=x, bins=bins)
         plt.show()
         
@@ -41,6 +42,7 @@ class Plots(object):
         """
         Plot scatter.
         """
+        print(self._df)
         self._df.plot.scatter(x,y)
         plt.tight_layout()
         plt.show()
@@ -49,14 +51,21 @@ class Plots(object):
         """
         Line plot.
         """
-        self._df.plot(x,y)
+        df = self._df.sort_values(by=x)
+        print(df)
+        df.plot(x,y)
         plt.tight_layout()
         plt.show()
 
-    def correlation(self):
+    def correlation(self, sort_on=None):
         """
         Correlation matrix.
         """
+        if not sort_on:
+            print(self._df)
+        else:
+            df = self._df.sort_values(by=sort_on)
+            print(df)
         corr = self._df.corr()
         cmap = sns.diverging_palette(230, 20, as_cmap=True)
         plt.figure()
@@ -71,8 +80,10 @@ class Plots(object):
         """
         Linear regression.
         """
-        g = sns.jointplot(x=x, y=y, data=self._df, kind='reg')
-        r, p = stats.pearsonr(self._df[x], self._df[y])
+        df = self._df.sort_values(by=x)
+        print(df)
+        g = sns.jointplot(x=x, y=y, data=df, kind='reg')
+        r, p = stats.pearsonr(df[x], df[y])
         g.ax_joint.annotate(f'$\\rho = {r:.3f}$',
                            xy=(0.1, 0.9), xycoords='axes fraction',
                            ha='left', va='center',
@@ -83,6 +94,7 @@ class Plots(object):
         """
         Pair plot.
         """
+        print(self._df)
         sns.set_theme(style="ticks")
         sns.pairplot(self._df)
         plt.show()
@@ -91,6 +103,7 @@ class Plots(object):
         """
         Residuals plot.
         """
+        print(self._df)
         sns.residplot(x=x, y=y, lowess=True, data=self._df)
         plt.show()
         
