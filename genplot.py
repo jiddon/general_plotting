@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 import seaborn as sns
@@ -176,6 +177,7 @@ class Plots(object):
         plt.figure()
         colours = sns.color_palette("pastel")[0:len(labels)]
         plt.pie(x, labels=labels, colors=colours, autopct="%1.1f%%")
+        plt.tight_layout()
         plt.show()
         
 if __name__=="__main__":
