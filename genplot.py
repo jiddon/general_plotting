@@ -104,6 +104,18 @@ class Plots(object):
         plt.tight_layout()
         plt.show()
 
+    def plot_same_canvas(self, x, *y):
+        """
+        Line plot for specified columns as a function of x.
+        """
+        df = self._df.sort_values(by=x)
+        print(df)
+        ax = df.plot(x, y[0])
+        for n,col in enumerate(y[1:]):
+            df.plot(x, col, ax=ax)
+        ax.set_ylabel("Normalised column", fontsize=10)
+        plt.tight_layout()
+        plt.show()
 
     def correlation(self):
         """
@@ -153,9 +165,19 @@ class Plots(object):
         print(self._df)
         sns.residplot(x=x, y=y, lowess=True, data=self._df)
         plt.show()
+
+    def pie(self):
+        """
+        Pie chart.
+        """
+        print(self._df)
+        labels = self._df.columns.values
+        x = self._df.iloc[0,:]
+        plt.figure()
+        colours = sns.color_palette("pastel")[0:len(labels)]
+        plt.pie(x, labels=labels, colors=colours, autopct="%1.1f%%")
+        plt.show()
         
-
-
 if __name__=="__main__":
     fire.Fire(Plots)
     
